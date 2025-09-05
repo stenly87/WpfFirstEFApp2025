@@ -1,0 +1,51 @@
+﻿<Window x:Class="WpfFirstEFApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfFirstEFApp"
+        xmlns:models="clr-namespace:WpfFirstEFApp.DB"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type models:Product}">
+            <StackPanel>
+                <TextBox Text="{Binding Title}"/>
+                <TextBox Text="{Binding Price}"/>
+                <TextBlock Text="{Binding Count, StringFormat=Количество:{0}}"/>
+                <Image Source="{Binding Image}" Width="200"/>
+                <TextBlock Text="{Binding Category.Title}"/>
+                <TextBlock Text="{Binding Supplier.Title}"/>
+                <Button Content="Update" Click="UpdateProduct"/>
+                <Button Content="Remove" 
+                        CommandParameter="{Binding}"
+                        Click="RemoveProduct"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <ListBox ItemsSource="{Binding Products}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel MaxWidth="720px"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+
+        <StackPanel Grid.Column="1" >
+            <StackPanel DataContext="{Binding InsertProduct}">
+                <TextBox Text="{Binding Title}"/>
+                <TextBox Text="{Binding Price}"/>
+                <TextBox Text="{Binding Count}"/>
+                <Image Source="{Binding Image}" Width="200"/>
+            </StackPanel>
+            <ComboBox DisplayMemberPath="Title" ItemsSource="{Binding Categories}" SelectedItem="{Binding InsertProduct.Category}"/>
+            <ComboBox DisplayMemberPath="Title" ItemsSource="{Binding Suppliers}" SelectedItem="{Binding InsertProduct.Supplier}"/>
+            <Button Content="Insert" Click="InsertProductMethod"/>
+        </StackPanel>        
+    </Grid>
+</Window>
